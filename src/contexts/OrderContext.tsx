@@ -3,7 +3,7 @@ import OrderDefinition, { OrderTypes } from "../types/order";
 
 interface IOrderContext {
   orderby: OrderDefinition;
-  toggleOrder?: (newOrder: string) => void;
+  toggleOrder?: (newOrder: OrderTypes) => void;
 }
 
 const defaultState = {

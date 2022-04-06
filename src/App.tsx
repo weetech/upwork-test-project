@@ -10,6 +10,7 @@ import "./App.css";
 
 const App: React.FC = () => {
   const [jobs, setJobs] = useState([]);
+  const [orderby, setOrderby] = useState<OrderTypes>(OrderTypes.Random);
 
   const fetchData: () => Promise<void> = async () => {
     const result = await fetch("/jobs.json");
@@ -17,10 +18,14 @@ const App: React.FC = () => {
     setJobs(data);
   };
 
-  const toggleOrder = (newOrder: string) => console.log(newOrder);
+  const toggleOrder = (newOrder: OrderTypes) => {
+    console.log(newOrder);
+    setOrderby(newOrder);
+  };
 
   useEffect(() => {
-    setTimeout(() => fetchData(), 3000);
+    fetchData();
+    // setTimeout(() => fetchData(), 3000);
   }, []);
 
   const JobList: React.ReactElement[] = jobs.map((value) => {
@@ -32,7 +37,7 @@ const App: React.FC = () => {
     <div className="App">
       <OrderContext.Provider
         value={{
-          orderby: OrderTypes.Random,
+          orderby: orderby,
           toggleOrder,
         }}
       >
