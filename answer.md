@@ -3,7 +3,7 @@
 Solution to the Problem: This is usual case, this is more or less handled by **Pagination** or **Infinite Scrolling**. I have used **Infinite Scrolling**. Because not whole list gets rendered so App performance improves. I have also used **memo** higher order component to stop rerendering of previously rendered components of the list. (However memo checks if your props are changed or not, so checking will happen every-time state inside parent component changes, changes using it should be avoided in more complex props)
 
 <br>
-2. No of different keys using `wp_generate_passowrd(8)`.
+2. No of different keys using `wp_generate_passowrd(8)`.<br>
 Ans: `wp_generate_passowrd` takes 3 arguments:
     1) No of char (default value 12)
     2) special_chars (default false)
