@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import { FC, memo } from "react";
 
 import JobProps from "../../types/job";
 import "./index.css";
 
-const Job: FC<JobProps> = ({ description, role, url, city, company, id }) => {
+const Job: FC<JobProps> = ({ description, role, url, city, company, id, priority }) => {
   return (
     <div className="App-job" id={id}>
       <a className="App-job__link" href={url} target="_blank">
@@ -18,4 +18,4 @@ const Job: FC<JobProps> = ({ description, role, url, city, company, id }) => {
   );
 };
 
-export default Job;
+export default memo(Job);

@@ -1,0 +1,1 @@
+export const JOBS_PER_CALL = 100;

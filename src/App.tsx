@@ -1,37 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-import Job from "./components/Job";
 import Nav from "./components/Nav";
 import OrderBy from "./components/OrderBy";
 import OrderContext from "./contexts/OrderContext";
 import { OrderTypes } from "./types/order";
 
 import "./App.css";
+import InfiniteList from "./components/InfiniteList";
+import JobDefinition from "./types/job";
 
 const App: React.FC = () => {
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<JobDefinition[]>([]);
   const [orderby, setOrderby] = useState<OrderTypes>(OrderTypes.Random);
-
-  const fetchData: () => Promise<void> = async () => {
+  const data = useMemo(async () => {
     const result = await fetch("/jobs.json");
     const data = await result.json();
-    setJobs(data);
+    if (orderby === OrderTypes.Priority) {
+      const sortedJobs = jobs.sort((a, b) => {
+        if (a.priority > b.priority) {
+          return -1;
+        }
+        if (a.priority < b.priority) {
+          return 1;
+        }
+        return 0;
+      });
+      return [...sortedJobs]
+    } else {
+      return [...data]
+    }
+  }, [orderby])
+
+  const fetchData: () => Promise<void> = async () => {
+    setJobs(await data);
   };
 
   const toggleOrder = (newOrder: OrderTypes) => {
-    console.log(newOrder);
     setOrderby(newOrder);
   };
 
   useEffect(() => {
     fetchData();
-    // setTimeout(() => fetchData(), 3000);
-  }, []);
-
-  const JobList: React.ReactElement[] = jobs.map((value) => {
-    const { id } = value;
-    return <Job key={id} {...value} />;
-  });
+  }, [orderby]);
 
   return (
     <div className="App">
@@ -42,10 +52,10 @@ const App: React.FC = () => {
         }}
       >
         <Nav />
-        {!!JobList.length && (
+        {!!jobs.length && (
           <div data-testid="app-jobs" className="App-jobs">
             <OrderBy />
-            {JobList}
+            <InfiniteList jobs={jobs} />
           </div>
         )}
       </OrderContext.Provider>
